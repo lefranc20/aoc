@@ -1,1 +1,5 @@
 *.class
+*.txt
+
+# Ignora arquivos README em qualquer subdiretório
+**/README

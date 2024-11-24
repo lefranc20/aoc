@@ -1,2 +1,1 @@
-# aoc2023
 Coleção de códigos feitos em múltiplas linguagens para a resolução dos desafios do Advent of Code através dos anos.

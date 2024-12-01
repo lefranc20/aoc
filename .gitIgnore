@@ -1,5 +1,7 @@
 *.class
 *.txt
+*.exe
+*.bin
 
 # Ignora arquivos README em qualquer subdiretório
 **/README

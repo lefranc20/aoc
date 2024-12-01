@@ -75,13 +75,13 @@ int main() {
     for (int i = 0; i < n; i++) {
         printf("%d ", coluna1[i]);
     }
-    printf("\n");
+    printf("\n\n");
 
     printf("Coluna 2 ordenada: ");
     for (int i = 0; i < n; i++) {
         printf("%d ", coluna2[i]);
     }
-    printf("\n");
+    printf("\n\n");
 
     printf("Soma total das diferenças: %d\n", soma_diferencas);
 

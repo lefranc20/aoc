@@ -2,6 +2,7 @@
 *.txt
 *.exe
 *.bin
+*.jar
 
 # Ignora arquivos README em qualquer subdiretório
 **/README

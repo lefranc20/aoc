@@ -1,1 +1,1 @@
-Coleção de códigos feitos em múltiplas linguagens para a resolução dos desafios do Advent of Code através dos anos.
+Repositório para a coleção de códigos feitos em múltiplas linguagens para a resolução dos desafios do Advent of Code através dos anos.

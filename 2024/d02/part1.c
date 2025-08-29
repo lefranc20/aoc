@@ -28,6 +28,7 @@ int main() {
     FILE *arquivo;
     char linha[MAX_LINE_LENGTH];
     int linhasAprovadas = 0;
+    int numLinhaAtual = 0;
 
     // Abra o arquivo para leitura
     arquivo = fopen("input.txt", "r");
@@ -38,6 +39,7 @@ int main() {
 
     // Leia o arquivo linha por linha
     while (fgets(linha, sizeof(linha), arquivo)) {
+        numLinhaAtual++;
         int numeros[MAX_LINE_LENGTH];
         int tamanho = 0;
 
@@ -48,16 +50,17 @@ int main() {
             token = strtok(NULL, " \t\n");
         }
 
-        // Verifique se a linha passa nos critérios
+        // Verifica se a linha passa nos critérios estabelecidos
         if (verificaLinha(numeros, tamanho)) {
             linhasAprovadas++;
+            printf("Linha aprovada: %d\n", numLinhaAtual);
         }
     }
 
     fclose(arquivo);
 
     // Exiba o total de linhas que passaram no teste
-    printf("Total de linhas aprovadas: %d\n", linhasAprovadas);
+    printf("\nTotal de linhas aprovadas: %d\n", linhasAprovadas);
 
     return EXIT_SUCCESS;
 }

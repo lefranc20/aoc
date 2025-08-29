@@ -1,77 +1,66 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <string.h> // Adicionado para strtok
+#include <string.h>
 
 #define MAX_LINE_LENGTH 1024
 
-// Função para verificar se uma linha é segura
-bool is_safe(int *numbers, int size) {
-    bool skipped = false; // Flag para indicar se um número já foi ignorado
+// Função para verificar se a linha está em ordem válida e respeita as regras
+bool verificaLinha(int numeros[], int tamanho) {
+    if (tamanho <= 1) return true; // Uma linha com um único número está automaticamente "aprovada".
 
-    for (int i = 0; i < size - 1; i++) {
-        int diff = abs(numbers[i + 1] - numbers[i]);
+    bool crescente = true, decrescente = true;
 
-        if (numbers[i] == numbers[i + 1]) {
-            // Regra: Números iguais desclassificam a linha
-            return false;
-        }
+    for (int i = 1; i < tamanho; i++) {
+        int diff = numeros[i] - numeros[i - 1];
 
-        if (diff > 3) {
-            if (skipped) {
-                // Já ignoramos um número antes, então não pode ser seguro
-                return false;
-            }
+        if (diff == 0) return false; // Dois números consecutivos iguais desclassificam a linha
+        if (diff > 3 || diff < -3) return false; // Diferença maior que 3 ou menor que -3.
 
-            // Tenta pular o próximo número
-            if (i + 2 < size && abs(numbers[i + 2] - numbers[i]) <= 3) {
-                skipped = true;
-                i++; // Ignora o próximo número
-            } else {
-                // Não há solução viável
-                return false;
-            }
-        }
-
-        // Verifica consistência da ordem (crescente ou decrescente)
-        if ((numbers[i] < numbers[i + 1] && numbers[i + 1] > numbers[i + 2]) ||
-            (numbers[i] > numbers[i + 1] && numbers[i + 1] < numbers[i + 2])) {
-            return false;
-        }
+        if (numeros[i] < numeros[i - 1]) crescente = false;
+        if (numeros[i] > numeros[i - 1]) decrescente = false;
     }
 
-    return true;
+    return crescente || decrescente;
 }
 
 int main() {
-    FILE *file = fopen("input.txt", "r");
-    if (!file) {
+    FILE *arquivo;
+    char linha[MAX_LINE_LENGTH];
+    int linhasAprovadas = 0;
+    int numLinhaAtual = 0;
+
+    // Abra o arquivo para leitura
+    arquivo = fopen("input.txt", "r");
+    if (arquivo == NULL) {
         perror("Erro ao abrir o arquivo");
         return EXIT_FAILURE;
     }
 
-    char line[MAX_LINE_LENGTH];
-    int safe_lines = 0;
+    // Leia o arquivo linha por linha
+    while (fgets(linha, sizeof(linha), arquivo)) {
+        numLinhaAtual++;
+        int numeros[MAX_LINE_LENGTH];
+        int tamanho = 0;
 
-    while (fgets(line, sizeof(line), file)) {
-        int numbers[MAX_LINE_LENGTH];
-        int count = 0;
-
-        // Lê os números da linha
-        char *token = strtok(line, " ");
-        while (token) {
-            numbers[count++] = atoi(token);
-            token = strtok(NULL, " ");
+        // Converte a linha em uma lista de números
+        char *token = strtok(linha, " \t\n");
+        while (token != NULL) {
+            numeros[tamanho++] = atoi(token);
+            token = strtok(NULL, " \t\n");
         }
 
-        // Verifica se a linha é segura
-        if (is_safe(numbers, count)) {
-            safe_lines++;
+        // Verifica se a linha passa nos critérios estabelecidos
+        if (verificaLinha(numeros, tamanho)) {
+            linhasAprovadas++;
+            printf("Linha aprovada: %d\n", numLinhaAtual);
         }
     }
 
-    fclose(file);
+    fclose(arquivo);
 
-    printf("Total de linhas seguras: %d\n", safe_lines);
+    // Exiba o total de linhas que passaram no teste
+    printf("\nTotal de linhas aprovadas: %d\n", linhasAprovadas);
+
     return EXIT_SUCCESS;
 }

@@ -14,14 +14,40 @@ bool verificaLinha(int numeros[], int tamanho) {
     for (int i = 1; i < tamanho; i++) {
         int diff = numeros[i] - numeros[i - 1];
 
-        if (diff == 0) return false; // Dois números consecutivos iguais desclassificam a linha
-        if (diff > 3 || diff < -3) return false; // Diferença maior que 3 ou menor que -3.
+        if (diff == 0) return false;               // Dois números consecutivos iguais desclassificam a linha
+        if (diff > 3 || diff < -3) return false;   // Diferença maior que 3 ou menor que -3.
 
         if (numeros[i] < numeros[i - 1]) crescente = false;
         if (numeros[i] > numeros[i - 1]) decrescente = false;
     }
 
     return crescente || decrescente;
+}
+
+// Função para verificar a linha com o "Problem Dampener" (Parte 2)
+bool verificaLinhaDampener(int numeros[], int tamanho) {
+    // Verifica se já é válido
+    if (verificaLinha(numeros, tamanho)) return true;
+
+    // Caso contrário, tente remover cada número
+    for (int i = 0; i < tamanho; i++) {
+        int temp[MAX_LINE_LENGTH];
+        int novoTamanho = 0;
+
+        // Copia todos os elementos exceto o i-ésimo
+        for (int j = 0; j < tamanho; j++) {
+            if (j != i) {
+                temp[novoTamanho++] = numeros[j];
+            }
+        }
+
+        // Se essa versão for válida → linha aprovada
+        if (verificaLinha(temp, novoTamanho)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 int main() {
@@ -50,8 +76,8 @@ int main() {
             token = strtok(NULL, " \t\n");
         }
 
-        // Verifica se a linha passa nos critérios estabelecidos
-        if (verificaLinha(numeros, tamanho)) {
+        // Verifica se a linha passa nos critérios estabelecidos (Parte 2)
+        if (verificaLinhaDampener(numeros, tamanho)) {
             linhasAprovadas++;
             printf("Linha aprovada: %d\n", numLinhaAtual);
         }
